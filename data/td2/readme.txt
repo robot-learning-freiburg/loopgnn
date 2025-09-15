@@ -1,0 +1,1 @@
+Note: the keyframe data for TD2 was extracted using the heuristic of OpenVINS https://docs.openvins.com/

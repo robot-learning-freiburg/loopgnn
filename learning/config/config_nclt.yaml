@@ -1,0 +1,121 @@
+defaults:
+  - _self_
+  - paths: local
+  - override hydra/hydra_logging: disabled
+  - override hydra/job_logging: disabled
+hydra:
+  output_subdir: null
+  run:
+    dir: .
+main:
+  wandb: true
+  device: cuda
+  dataset: nclt
+  kp_method: xfeat
+  recompute_vlad_sim: false
+  recompute_desc: true
+data:
+  td2:
+    train:
+      - 2023-11-14-14-26-22_gupta
+      - 2023-11-14-14-34-53_gupta
+      - 2023-11-14-14-45-20_gupta
+      - 2023-11-14-14-52-22_gupta
+      - 2023-11-14-15-02-21_figure_8
+      - gupta_skydio_2023-09-14-11-03-09
+      - turnpike_2023-09-12-12-53-32
+    test:
+      - figure_8_2023-09-13-17-24-26
+      - figure_8_morning_2023-09-12-10-37-17
+      - figure_8_morning_slow_2023-09-12-11-06-32
+    intrinsics: [455.77496337890625, 0.0, 497.1180114746094, 0.0, 456.319091796875, 251.58502197265625, 0.0, 0.0, 1.0]
+  nclt:
+    train:
+      - "2012-01-22"
+      - "2012-02-02"
+      - "2012-02-18"
+      - "2012-05-11"
+    test:
+      - "2012-02-12"
+      - "2012-02-19"
+      - "2012-03-31"
+      - "2012-05-26"
+    debug:
+      - "2012-01-22"
+    intrinsics: [399.433184, 0.0, 621.668624, 0.0, 399.433184, 826.36195, 0.0, 0.0, 1.0]
+    crop_params:
+      width: 1232
+      height: 1616
+      width_new: 800
+      height_new: 800
+preprocessing:
+  retrieval_ratio: 0.02 #[0.01, 0.02]
+  # min_frame_dist: 5
+  remove_vicinal_kf: false
+  img_size: 512
+  kp:
+    orb:
+      desc_dim: 32
+      num_kp: 512
+      vlad_dist_mode: euclidean
+      vlad_mode: hard
+      vlad_clusters: 512
+    sift:
+      desc_dim: 128
+      num_kp: 512
+      vlad_dist_mode: euclidean
+      vlad_mode: hard
+      vlad_clusters: 512
+    xfeat:
+      desc_dim: 64
+      num_kp: 2048
+      vlad_dist_mode: cosine
+      vlad_mode: hard
+      vlad_clusters: 512
+    superpoint:
+      desc_dim: 256
+      num_kp: 512
+      vlad_dist_mode: cosine
+      vlad_mode: hard
+      vlad_clusters: 512
+    aliked:
+      desc_dim: 128
+      num_kp: 1024
+      vlad_dist_mode: cosine
+      vlad_mode: hard
+      vlad_clusters: 512
+  cross_seq_loops:
+    train: true
+    test: false
+  scene_wise:
+    train: false
+    test: true
+gnn:
+  edge_feat_dim: 16
+  node_feat_dim: 256
+  hidden_feat_dim: 256
+  depth: 0
+  batch_size: 2
+  lr: 1e-4
+  weight_decay: 1e-4
+  num_epochs: 10
+  beta_low: 0.9
+  beta_high: 0.999
+  aggr: max
+  dropout_rate: 0.2
+  netvlad:
+    num_clusters: 64
+    dim: 64
+  save_checkpoint: true
+  max_it_epoch: 1000 # 250
+  min_cossim: 0.82
+  geometry: false
+  topk_matches: 500
+  loop_weight: 1.0
+  train: true
+  eval: true
+inference:
+  load_checkpoint: true
+  checkpoint: learning/loopgnn/checkpoints/path-to-checkpoint.pth
+
+

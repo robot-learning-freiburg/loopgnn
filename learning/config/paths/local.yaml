@@ -1,0 +1,5 @@
+project: /path/to/base-repo/
+checkpoints: /path/to/base-repo/learning/loopgnn/checkpoints
+data:
+  td2: /data/td2/keyframes/
+  nclt: /data/nclt/
